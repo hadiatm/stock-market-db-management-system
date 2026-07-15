@@ -1,0 +1,302 @@
+create database StockMarketDB;
+use StockMarketDB;
+
+create table Broker(
+    BrokerID int primary key auto_increment ,
+    BrokerName varchar(150) not null,
+    LicenseNo varchar(50) unique not null,
+    CommissionRate decimal(5,2) not null);
+
+create table Investor(
+    InvestorID int primary key auto_increment,
+    Name varchar(100) not null,
+    Email varchar(100) unique,
+    Phone varchar(20),
+    BrokerID int,
+    foreign key (BrokerID) references Broker(BrokerID)
+);
+
+create table Stock(
+    StockID int primary key auto_increment,
+    Symbol varchar(20) unique not null,
+    CompanyName varchar(100) not null,
+    Price decimal(10,2) not null);
+    
+create table TransactionRecord(
+    TransactionID int primary key auto_increment,
+    InvestorID int,
+    BrokerID int,
+    StockID int,
+    Quantity int not null,
+    TradeType varchar(10) not null,
+    TradeDate date not null,
+    foreign key (InvestorID) references Investor(InvestorID),
+    foreign key (BrokerID) references Broker(BrokerID),
+    foreign key (StockID) references Stock(StockID)
+);
+
+create table Portfolio(
+    PortfolioID int primary key auto_increment,
+    InvestorID int unique,
+    TotalValue decimal(12,2),
+    foreign key (InvestorID) references Investor(InvestorID)
+);
+
+insert into Broker (BrokerID, BrokerName, LicenseNo, CommissionRate) values
+(1,'AKD Securities Limited','AKD001', 0.15),
+(2,'JS Global Capital Limited','JSG001', 0.20),
+(3,'Mohammad Munir Mohammad Ahmed Khanani Securities Limited','MMK001', 0.18),
+(4,'KTrade Securities Limited','KTR001', 0.15),
+(5,'Arif Habib Limited','AHL001', 0.22),
+(6,'BMA Capital Management Limited','BMA001', 0.20),
+(7,'Next Capital Limited','NCL001', 0.18),
+(8,'Foundation Securities (Private) Limited','FSL001', 0.15),
+(9,'Standard Capital Securities (Private) Limited','SCS001', 0.20),
+(10,'Syed Faraz Equities (Private) Limited','SFE001', 0.17),
+(11,'Topline Securities (Private) Limited','TLS001', 0.20),
+(12,'Alfalah Securities (Private) Limited','ALS001', 0.18),
+(13,'Equity Master Securities (Private) Limited','EMS001', 0.16),
+(14,'Cedar Capital (Private) Limited','CCL001', 0.19),
+(15,'Adam Securities (Private) Limited','ASL001', 0.17),
+(16,'WE Financial Services Limited','WFS001', 0.21),
+(17,'Spectrum Securities (Private) Limited','SPS001', 0.18),
+(18,'Zafar Securities (Private) Limited','ZSL001', 0.16),
+(19,'Dalal Securities (Private) Limited','DSL001', 0.19),
+(20,'Float Securities (Private) Limited','FLS001', 0.15);
+
+insert into Stock (StockID, Symbol, CompanyName, Price) values
+(1,'WTL','WorldCall Telecom Limited', 1.30),
+(2,'BOP','Bank of Punjab', 33.79),
+(3,'CNERGY','Cnergyico PK Limited', 8.12),
+(4,'HASCOLNC','Hascol Petroleum Limited', 21.17),
+(5,'FNEL','First National Equities Limited', 1.40),
+(6,'YOUW','Yousuf Weaving Mills Limited', 6.23),
+(7,'CSIL','Crescent Star Insurance Limited', 6.70),
+(8,'PACE','Pace Pakistan Limited', 11.24),
+(9,'KEL','K-Electric Limited', 7.56),
+(10,'CLOV','Clover Pakistan Limited', 8.06),
+(11,'PILNC','Pakistan Industrial Leasing Limited', 5.92),
+(12,'MSCL','Metropolitan Steel Corporation Limited', 38.45),
+(13,'TSMF','Tri-Star Mutual Fund', 17.59),
+(14,'ZTL','Zeal Textile Limited', 17.92),
+(15,'MACFL','MACPAC Films Limited', 29.36),
+(16,'SPLNC','Security Papers Limited', 79.72),
+(17,'BPL','Bolan Pharmaceuticals Limited', 33.99),
+(18,'SHCM','Shahmurad Chemicals Limited', 39.57),
+(19,'TPLL','TPL Logistics Limited', 21.55),
+(20,'HBL','Habib Bank Limited', 381.23),
+(21,'UBL','United Bank Limited', 357.70),
+(22,'OGDC','Oil and Gas Development Company Limited', 215.50),
+(23,'PSO','Pakistan State Oil', 357.70),
+(24,'ENGRO','Engro Corporation Limited', 298.40),
+(25,'FFC','Fauji Fertilizer Company Limited', 168.25);
+
+insert into Investor (InvestorID, Name, Email, Phone, BrokerID) values
+(1,'Elaf Muneeb', 'elaf.muneeb@gmail.com','03346789125',1),
+(2,'Mahnoor Javed', 'mahnoor.javed@gmail.com','03067891234',2),
+(3,'Abeer Usman', 'abeer.usman@gmail.com','03158914326',3),
+(4,'Zavian Raza', 'zavian.raza@gmail.com','03249876135',4),
+(5,'Eshal Tariq', 'eshal.tariq@gmail.com','03325678914',5),
+(6,'Mikaal Shahmeer', 'mikaal.shahmeer@gmail.com','03091234578',6),
+(7,'Anaya Saqib', 'anaya.saqib@gmail.com','03173456289',7),
+(8,'Areeb Hamdani', 'areeb.hamdani@gmail.com','03262345198',8),
+(9,'Inaya Haroon', 'inaya.haroon@gmail.com','03384567231',9),
+(10,'Zimal Noor', 'zimal.noor@gmail.com','03075623149',10),
+(11,'Huzaifa Danish', 'huzaifa.danish@gmail.com','03146782915',11),
+(12,'Meher Aftab', 'meher.aftab@gmail.com','03297814563',12),
+(13,'Taimoor Siddiqi', 'taimoor.siddiqi@gmail.com','03315627894',13),
+(14,'Aleena Yousri', 'aleena.yousri@gmail.com','03084569127',14),
+(15,'Rameen Irtiza', 'rameen.irtiza@gmail.com','03195627834',15);
+
+insert into TransactionRecord (TransactionID,InvestorID,BrokerID,StockID,Quantity,TradeType,TradeDate) values
+(1,4,2,7,1200,'Buy','2026-03-01'),
+(2,1,5,2,3500,'Sell','2026-03-02'),
+(3,9,3,14,800,'Buy','2026-03-02'),
+(4,6,8,4,2500,'Buy','2026-03-03'),
+(5,12,1,20,150,'Sell','2026-03-04'),
+(6,3,11,9,4000,'Buy','2026-03-05'),
+(7,15,6,25,300,'Buy','2026-03-05'),
+(8,8,14,1,7000,'Sell','2026-03-06'),
+(9,2,4,18,900,'Buy','2026-03-07'),
+(10,11,10,6,2000,'Sell','2026-03-08'),
+(11,5,7,23,250,'Buy','2026-03-09'),
+(12,14,9,11,1300,'Buy','2026-03-10'),
+(13,7,13,3,5000,'Sell','2026-03-10'),
+(14,10,15,22,175,'Buy','2026-03-11'),
+(15,13,12,8,2200,'Buy','2026-03-12');
+
+insert into Portfolio (PortfolioID,InvestorID,TotalValue)
+select
+t.InvestorID,
+t.InvestorID,
+t.Quantity*s.Price
+from TransactionRecord t
+join Stock s on t.StockID=s.StockID;
+
+-- D. System Modules
+-- Module 1: Investor Management
+
+-- Register and Manage Investors
+insert into Investor (InvestorID,Name,Email,Phone,BrokerID)
+values (16,'Noor Hashmi','noor.hashmi@gmail.com','03012345678',4);
+
+-- Assign Brokers to Investors
+update Investor
+set BrokerID=5
+where InvestorID=3;
+
+-- Search Investors
+select *
+from Investor
+where Name like '%Noor%';
+
+-- Module 2: Broker Management
+-- View Broker Details
+select * from Broker;
+
+-- Update Broker Commission
+update Broker
+set CommissionRate=0.25
+where BrokerID=1;
+
+-- Calculate Broker Commission
+select b.BrokerName,
+sum((t.Quantity*s.Price)*b.CommissionRate/100) as CommissionEarned
+from Broker b
+join TransactionRecord t on b.BrokerID=t.BrokerID
+join Stock s on t.StockID=s.StockID
+group by b.BrokerName;
+
+
+-- Module 3: Stock and Transaction Management
+-- Record Stock Buy or Sell Transactions
+insert into TransactionRecord
+(TransactionID,InvestorID,BrokerID,StockID,Quantity,TradeType,TradeDate)
+values
+(16,2,2,5,3000,'Buy','2026-03-15');
+
+-- Maintain Stock Information
+update Stock
+set Price=35.50
+where StockID=2;
+
+-- Filter Transactions
+select *
+from TransactionRecord
+where TradeType='Buy';
+
+-- Module 4: Performance Analytics
+-- Profit or Loss Calculation
+select s.Symbol,
+sum(
+case
+when t.TradeType='Buy' then -(t.Quantity*s.Price)
+when t.TradeType='Sell' then (t.Quantity*s.Price)
+end
+) as ProfitOrLoss
+from Stock s
+join TransactionRecord t on s.StockID=t.StockID
+group by s.Symbol;
+
+-- Monthly Transaction Summary
+select month(TradeDate) as TradeMonth,
+count(*) as TotalTransactions
+from TransactionRecord
+group by month(TradeDate);
+
+-- F. Functional Requirements
+
+-- Track Portfolio Holdings
+select i.Name,p.TotalValue
+from Investor i
+join Portfolio p on i.InvestorID=p.InvestorID;
+
+-- Search and Filter Data
+select *
+from Stock
+where Price>50;
+
+-- G. Queries
+
+-- Total Investment Per Investor
+select i.Name,
+sum(t.Quantity*s.Price) as TotalInvestment
+from Investor i
+join TransactionRecord t on i.InvestorID=t.InvestorID
+join Stock s on t.StockID=s.StockID
+where t.TradeType='Buy'
+group by i.Name;
+
+-- Profit or Loss Per Stock
+select s.Symbol,
+sum(
+case
+when t.TradeType='Buy' then -(t.Quantity*s.Price)
+when t.TradeType='Sell' then (t.Quantity*s.Price)
+end
+) as ProfitOrLoss
+from Stock s
+join TransactionRecord t on s.StockID=t.StockID
+group by s.Symbol;
+
+-- Commission Earned By Each Broker
+select b.BrokerName,
+sum((t.Quantity*s.Price)*b.CommissionRate/100) as CommissionEarned
+from Broker b
+join TransactionRecord t on b.BrokerID=t.BrokerID
+join Stock s on t.StockID=s.StockID
+group by b.BrokerName;
+
+-- Most Active Broker Using Count
+select b.BrokerName,
+count(*) as TotalTransactions
+from Broker b
+join TransactionRecord t on b.BrokerID=t.BrokerID
+group by b.BrokerName
+order by TotalTransactions desc;
+
+-- Portfolio Value Using Join
+select i.Name,p.TotalValue
+from Investor i
+join Portfolio p on i.InvestorID=p.InvestorID;
+
+-- Monthly Transaction Summary
+select month(TradeDate) as TradeMonth,
+count(*) as TotalTransactions
+from TransactionRecord
+group by month(TradeDate);
+
+-- I. Advanced Features
+
+-- View For Portfolio Summary
+create view PortfolioSummary as
+select i.Name,p.TotalValue
+from Investor i
+join Portfolio p on i.InvestorID=p.InvestorID;
+
+SELECT * FROM PortfolioSummary;
+
+-- Indexing
+create index idx_InvestorID on TransactionRecord(InvestorID);
+
+create index idx_StockID on TransactionRecord(StockID);
+
+-- Procedures 
+DELIMITER //
+CREATE PROCEDURE GetInvestorPortfolio(IN investor_id INT)
+BEGIN
+    SELECT i.Name, p.TotalValue
+    FROM Investor i
+    JOIN Portfolio p ON i.InvestorID = p.InvestorID
+    WHERE i.InvestorID = investor_id;
+END //
+DELIMITER ;
+CALL GetInvestorPortfolio(1);
+
+DELIMITER //
+CREATE PROCEDURE ShowAllBrokers()
+BEGIN
+    SELECT * FROM Broker;
+END //
+DELIMITER ;
+CALL ShowAllBrokers();
